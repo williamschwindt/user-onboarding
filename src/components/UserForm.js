@@ -17,13 +17,19 @@ const UserForm = ({ errors, touched, values, status }) => {
         } else return 'Terms were not accepted';
     };
 
+    const emailValidation = (value) => {
+        if(value === 'williammschwindt@gmail.com') {
+            return 'Email already taken';
+        };
+    };
+
     return (
         <div>
             <Form>
                 <Field name="name" type="text" placeholder="Name" value={values.name}/>
                 {touched.name && errors.name && <p>{errors.name}</p>}
 
-                <Field name="email" type="text" placeholder="Email" value={values.email}/>
+                <Field name="email" type="text" placeholder="Email" value={values.email} validate={emailValidation}/>
                 {touched.email && errors.email && <p>{errors.email}</p>}
 
                 <Field name="password" type="text" placeholder="Password" value={values.password}/>
@@ -34,16 +40,18 @@ const UserForm = ({ errors, touched, values, status }) => {
                 <button type="submit">Submit</button>
             </Form>
 
-            {users.map((user, key) => {
-                return (
-                    <div key={user.id}>
-                        <h2>{user.name}</h2>
-                        <p>{user.email}</p>
-                        <p>{user.password}</p>
-                        <p>{termsHandler(user.terms)}</p>
-                    </div>
-                )
-            })}
+            <div className="users">
+                {users.map((user, key) => {
+                    return (
+                        <div className="user" key={user.id}>
+                            <h2>{user.name}</h2>
+                            <p>{user.email}</p>
+                            <p>{user.password}</p>
+                            <p>{termsHandler(user.terms)}</p>
+                        </div>
+                    )
+                })}
+            </div>
         </div>
     );
 }
@@ -60,7 +68,7 @@ const FormikUserForm = withFormik({
 
     validationSchema: Yup.object().shape({
         name: Yup.string().required("Name is required"),
-        email: Yup.string().required("Email is required"),
+        email: Yup.string().required("Email is required").email("Invalid email"),
         password: Yup.string().required("Password is required"),
         terms: Yup.bool()
     }),
