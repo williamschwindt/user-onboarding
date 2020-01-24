@@ -25,8 +25,9 @@ const UserForm = ({ errors, touched, values, status }) => {
 
     const handleDelete = (e)  => {
         e.persist();
+        const user = users.filter(u => u.name === e.target.name);
         axios
-            .delete("https://reqres.in/api/users", values)
+            .delete("https://reqres.in/api/users", user.values)
 
             .then((res) => {
                 console.log(res);
