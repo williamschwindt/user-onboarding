@@ -23,6 +23,24 @@ const UserForm = ({ errors, touched, values, status }) => {
         };
     };
 
+    const handleDelete = (e)  => {
+        e.persist();
+        axios
+            .delete("https://reqres.in/api/users", values)
+
+            .then((res) => {
+                console.log(res);
+                const name = e.target.name;
+                setUsers(users.filter(user => user.name !== name));
+            })
+
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+
+
+
     return (
         <div>
             <Form>
@@ -35,15 +53,16 @@ const UserForm = ({ errors, touched, values, status }) => {
                 <Field name="password" type="text" placeholder="Password" value={values.password}/>
                 {touched.password && errors.password && <p>{errors.password}</p>}
 
-                <label><Field type="checkbox" name="terms" value={values.terms} /></label>
+                <label>Accpet Terms of Survice<Field type="checkbox" name="terms" value={values.terms} /></label>
 
                 <button type="submit">Submit</button>
             </Form>
 
             <div className="users">
-                {users.map((user, key) => {
+                {users.map((user) => {
                     return (
                         <div className="user" key={user.id}>
+                            <button name={user.name} onClick={handleDelete} className="user-buton">X</button>
                             <h2>{user.name}</h2>
                             <p>{user.email}</p>
                             <p>{user.password}</p>
@@ -52,6 +71,7 @@ const UserForm = ({ errors, touched, values, status }) => {
                     )
                 })}
             </div>
+                
         </div>
     );
 }
@@ -84,7 +104,8 @@ const FormikUserForm = withFormik({
                 setStatus(res.data);
                 resetForm();
             })
-    }
+    },
+
 })(UserForm);
 
 export default FormikUserForm;
