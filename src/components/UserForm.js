@@ -34,7 +34,6 @@ const UserForm = ({ errors, touched, values, status }) => {
                 const name = e.target.name;
                 setUsers(users.filter(user => user.name !== name));
             })
-
             .catch((err) => {
                 console.log(err);
             })
@@ -44,6 +43,7 @@ const UserForm = ({ errors, touched, values, status }) => {
 
     return (
         <div>
+            <h1>Add a new user</h1>
             <Form>
                 <Field name="name" type="text" placeholder="Name" value={values.name}/>
                 {touched.name && errors.name && <p>{errors.name}</p>}
@@ -54,7 +54,7 @@ const UserForm = ({ errors, touched, values, status }) => {
                 <Field name="password" type="text" placeholder="Password" value={values.password}/>
                 {touched.password && errors.password && <p>{errors.password}</p>}
 
-                <label>Accpet Terms of Survice<Field type="checkbox" name="terms" value={values.terms} /></label>
+                <label>Accpet Terms of Survice<Field className="checkbox" type="checkbox" name="terms" value={values.terms} /></label>
 
                 <button type="submit">Submit</button>
             </Form>
